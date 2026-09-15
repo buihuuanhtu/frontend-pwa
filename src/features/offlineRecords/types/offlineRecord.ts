@@ -1,4 +1,4 @@
-export type OfflineRecordSyncStatus = 'pending'
+export type OfflineRecordSyncStatus = 'pending' | 'synced'
 
 export type OfflineRecord = {
   id: string
@@ -7,4 +7,6 @@ export type OfflineRecord = {
   createdAt: string
   updatedAt?: string
   syncStatus: OfflineRecordSyncStatus
+  remoteId?: string
+  syncedAt?: string
 }

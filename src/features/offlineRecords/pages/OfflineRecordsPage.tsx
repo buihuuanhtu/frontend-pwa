@@ -3,6 +3,7 @@ import {
   DeleteOutlined,
   EditOutlined,
   SaveOutlined,
+  SyncOutlined,
 } from '@ant-design/icons'
 import {
   Alert,
@@ -29,6 +30,7 @@ import {
 } from '@/features/offlineRecords/schemas/offlineRecordSchema'
 import { offlineRecordRepository } from '@/features/offlineRecords/services/offlineRecordRepository'
 import type { OfflineRecord } from '@/features/offlineRecords/types/offlineRecord'
+import { useSync } from '@/services/sync/syncContext'
 import './OfflineRecordsPage.css'
 
 const dateFormatter = new Intl.DateTimeFormat('vi-VN', {
@@ -42,6 +44,7 @@ const OfflineRecordsPage = () => {
   const [editingRecordId, setEditingRecordId] = useState<string | null>(null)
   const [messageApi, messageContext] = message.useMessage()
   const isOnline = useOnlineStatus()
+  const { sync, isSyncing, lastCompletedAt, lastResult } = useSync()
 
   const {
     control,
@@ -73,6 +76,23 @@ const OfflineRecordsPage = () => {
     }
   }, [messageApi])
 
+  useEffect(() => {
+    if (!lastCompletedAt || !lastResult) return
+
+    offlineRecordRepository
+      .list()
+      .then(setRecords)
+      .catch(() => messageApi.error('Không thể cập nhật dữ liệu sau đồng bộ'))
+
+    if (lastResult.synced > 0) {
+      messageApi.success(`Đã đồng bộ ${lastResult.synced} thao tác`)
+    }
+
+    if (lastResult.failed > 0) {
+      messageApi.warning(`${lastResult.failed} thao tác chưa thể đồng bộ`)
+    }
+  }, [lastCompletedAt, lastResult, messageApi])
+
   const onSubmit = async (values: OfflineRecordFormValues) => {
     try {
       if (editingRecordId) {
@@ -88,6 +108,7 @@ const OfflineRecordsPage = () => {
         setEditingRecordId(null)
         reset()
         messageApi.success('Đã cập nhật bản ghi trên thiết bị')
+        if (isOnline) void sync()
         return
       }
 
@@ -95,6 +116,7 @@ const OfflineRecordsPage = () => {
       setRecords((currentRecords) => [record, ...currentRecords])
       reset()
       messageApi.success('Đã lưu bản ghi trên thiết bị')
+      if (isOnline) void sync()
     } catch {
       messageApi.error('Không thể lưu bản ghi trên thiết bị')
     }
@@ -121,6 +143,7 @@ const OfflineRecordsPage = () => {
       )
       if (editingRecordId === id) cancelEditing()
       messageApi.success('Đã xóa bản ghi')
+      if (isOnline) void sync()
     } catch {
       messageApi.error('Không thể xóa bản ghi')
     }
@@ -224,7 +247,18 @@ const OfflineRecordsPage = () => {
           <Typography.Title level={2} id="saved-records-title">
             Bản ghi đã lưu
           </Typography.Title>
-          <Typography.Text type="secondary">{records.length} bản ghi</Typography.Text>
+          <div className="offline-records-list-meta">
+            <Typography.Text type="secondary">{records.length} bản ghi</Typography.Text>
+            <Tooltip title="Đồng bộ lại">
+              <Button
+                type="text"
+                icon={<SyncOutlined spin={isSyncing} />}
+                aria-label="Đồng bộ lại dữ liệu"
+                disabled={!isOnline || isSyncing}
+                onClick={() => void sync()}
+              />
+            </Tooltip>
+          </div>
         </div>
 
         {isLoading ? (
@@ -240,7 +274,9 @@ const OfflineRecordsPage = () => {
                 <div className="offline-record-content">
                   <div className="offline-record-title-row">
                     <Typography.Text strong>{record.title}</Typography.Text>
-                    <Tag color="processing">Chờ đồng bộ</Tag>
+                    <Tag color={record.syncStatus === 'synced' ? 'success' : 'processing'}>
+                      {record.syncStatus === 'synced' ? 'Đã đồng bộ' : 'Chờ đồng bộ'}
+                    </Tag>
                   </div>
                   {record.note && (
                     <Typography.Paragraph>{record.note}</Typography.Paragraph>

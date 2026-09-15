@@ -96,6 +96,18 @@
   align-items: baseline;
 }
 
+.offline-records-list-meta {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 4px;
+}
+
+.offline-records-list-meta .ant-btn {
+  width: 36px;
+  height: 36px;
+}
+
 .offline-records-form-actions,
 .offline-record-actions {
   display: flex;
@@ -236,5 +248,10 @@
 
   .offline-record-actions {
     flex-direction: column;
+  }
+
+  .offline-records-list-meta {
+    width: 100%;
+    justify-content: space-between;
   }
 }
