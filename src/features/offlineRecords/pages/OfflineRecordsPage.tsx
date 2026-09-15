@@ -38,6 +38,11 @@ const dateFormatter = new Intl.DateTimeFormat('vi-VN', {
   timeStyle: 'short',
 })
 
+const EMPTY_FORM_VALUES: OfflineRecordFormValues = {
+  title: '',
+  note: '',
+}
+
 const OfflineRecordsPage = () => {
   const [records, setRecords] = useState<OfflineRecord[]>([])
   const [isLoading, setIsLoading] = useState(true)
@@ -53,7 +58,7 @@ const OfflineRecordsPage = () => {
     formState: { errors, isSubmitting },
   } = useForm<OfflineRecordFormValues>({
     resolver: zodResolver(offlineRecordSchema),
-    defaultValues: { title: '', note: '' },
+    defaultValues: EMPTY_FORM_VALUES,
   })
 
   useEffect(() => {
@@ -106,7 +111,7 @@ const OfflineRecordsPage = () => {
           ),
         )
         setEditingRecordId(null)
-        reset()
+        reset(EMPTY_FORM_VALUES)
         messageApi.success('Đã cập nhật bản ghi trên thiết bị')
         if (isOnline) void sync()
         return
@@ -114,7 +119,7 @@ const OfflineRecordsPage = () => {
 
       const record = await offlineRecordRepository.create(values)
       setRecords((currentRecords) => [record, ...currentRecords])
-      reset()
+      reset(EMPTY_FORM_VALUES)
       messageApi.success('Đã lưu bản ghi trên thiết bị')
       if (isOnline) void sync()
     } catch {
@@ -132,7 +137,7 @@ const OfflineRecordsPage = () => {
 
   const cancelEditing = () => {
     setEditingRecordId(null)
-    reset()
+    reset(EMPTY_FORM_VALUES)
   }
 
   const removeRecord = async (id: string) => {
