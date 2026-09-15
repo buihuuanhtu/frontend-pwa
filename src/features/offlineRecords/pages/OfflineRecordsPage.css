@@ -1,0 +1,240 @@
+.offline-records-page {
+  width: 100%;
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 40px 32px 64px;
+  box-sizing: border-box;
+  text-align: left;
+}
+
+.offline-records-header,
+.offline-records-list-heading,
+.offline-record-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.offline-records-header {
+  align-items: flex-start;
+  margin-bottom: 24px;
+}
+
+.offline-records-header > div {
+  min-width: 0;
+}
+
+.offline-records-header h1 {
+  margin: 0 0 4px;
+  font-size: 32px;
+  line-height: 1.2;
+  letter-spacing: 0;
+}
+
+.offline-records-header .ant-tag,
+.offline-record-title-row .ant-tag {
+  flex: 0 0 auto;
+  margin-inline-end: 0;
+}
+
+.offline-records-workspace {
+  display: grid;
+  grid-template-columns: minmax(280px, 360px) minmax(0, 1fr);
+  gap: 40px;
+  align-items: start;
+}
+
+.offline-records-form,
+.offline-records-list {
+  min-width: 0;
+  padding-top: 28px;
+}
+
+.offline-records-form {
+  position: sticky;
+  top: 24px;
+  padding-right: 40px;
+  border-right: 1px solid var(--border);
+}
+
+.offline-records-form h2,
+.offline-records-list h2 {
+  margin-top: 0;
+  margin-bottom: 16px;
+  font-size: 22px;
+  line-height: 1.3;
+  letter-spacing: 0;
+}
+
+.offline-records-form .ant-form-item {
+  margin-bottom: 20px;
+}
+
+.offline-records-form .ant-form-item-row {
+  display: grid;
+  grid-template-columns: 88px minmax(0, 1fr);
+  align-items: start;
+}
+
+.offline-records-form .ant-form-item-label {
+  max-width: none;
+  padding: 0 12px 0 0;
+  text-align: left;
+}
+
+.offline-records-form .ant-form-item-label > label {
+  height: 32px;
+}
+
+.offline-records-form .ant-form-item-control {
+  min-width: 0;
+  max-width: none;
+}
+
+.offline-records-list-heading {
+  align-items: baseline;
+}
+
+.offline-records-form-actions,
+.offline-record-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.offline-records-form-actions {
+  flex-wrap: wrap;
+  margin-inline-start: 88px;
+}
+
+.offline-record-actions {
+  flex: 0 0 auto;
+}
+
+.offline-record-actions .ant-btn {
+  width: 36px;
+  height: 36px;
+}
+
+.offline-record-item {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: start !important;
+  gap: 16px;
+  margin-bottom: 12px;
+  padding: 16px !important;
+  border: 1px solid var(--border) !important;
+  border-radius: 8px;
+  background: var(--bg);
+}
+
+.offline-record-content {
+  min-width: 0;
+}
+
+.offline-record-title-row {
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  margin-bottom: 8px;
+}
+
+.offline-record-content .ant-typography {
+  overflow-wrap: anywhere;
+}
+
+.offline-record-content p.ant-typography {
+  margin-bottom: 8px;
+  white-space: pre-wrap;
+}
+
+.offline-records-loading {
+  display: grid;
+  min-height: 160px;
+  place-items: center;
+}
+
+@media (max-width: 900px) {
+  .offline-records-page {
+    max-width: 760px;
+    padding: 32px 24px 56px;
+  }
+
+  .offline-records-workspace {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0;
+  }
+
+  .offline-records-form {
+    position: static;
+    padding-right: 0;
+    padding-bottom: 32px;
+    border-right: 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .offline-records-list {
+    padding-top: 32px;
+  }
+}
+
+@media (max-width: 600px) {
+  .offline-records-page {
+    padding: 24px 16px 48px;
+  }
+
+  .offline-records-header {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+
+  .offline-records-header h1 {
+    font-size: 28px;
+  }
+
+  .offline-records-form,
+  .offline-records-list {
+    padding-top: 24px;
+  }
+
+  .offline-records-form {
+    padding-bottom: 24px;
+  }
+
+  .offline-records-form-actions {
+    flex-direction: column;
+    margin-inline-start: 0;
+  }
+
+  .offline-records-form-actions .ant-btn {
+    width: 100%;
+  }
+
+  .offline-record-item {
+    gap: 8px;
+    padding: 14px !important;
+  }
+
+  .offline-record-title-row {
+    gap: 8px;
+  }
+
+  .offline-record-actions .ant-btn {
+    width: 40px;
+    height: 40px;
+  }
+}
+
+@media (max-width: 380px) {
+  .offline-records-list-heading {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .offline-record-actions {
+    flex-direction: column;
+  }
+}
